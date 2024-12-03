@@ -9,6 +9,7 @@ type Props = {
   todos: Todo[];
   setTodos: (a: Todo[]) => void;
   setTempTodo: (a: Todo[] | null) => void;
+  tempTodo: Todo | null;
 };
 
 export const TodoInput: React.FC<Props> = ({
@@ -16,6 +17,7 @@ export const TodoInput: React.FC<Props> = ({
   todos,
   setTodos,
   setTempTodo,
+  tempTodo,
 }) => {
   const [title, setTitle] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -24,7 +26,7 @@ export const TodoInput: React.FC<Props> = ({
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, []);
+  }, [todos, tempTodo]);
 
   function handleInputValue(event: React.ChangeEvent<HTMLInputElement>) {
     setTitle(event.target.value);
@@ -32,6 +34,7 @@ export const TodoInput: React.FC<Props> = ({
 
   const handleAddTodo = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      event.preventDefault();
       setTempTodo({ id: 0, title: title.trim(), userId, completed: false });
       if (title.trim().length > 0) {
         servisesTodos
@@ -43,7 +46,7 @@ export const TodoInput: React.FC<Props> = ({
           })
           .catch(() => {
             setTempTodo(null);
-            setErrorMessage(' Unable to add a todo');
+            setErrorMessage('Unable to add a todo');
           });
       } else {
         setTempTodo(null);
@@ -62,7 +65,7 @@ export const TodoInput: React.FC<Props> = ({
       />
 
       {/* Add a todo on form submit */}
-      <form>
+      <form onKeyDown={handleAddTodo}>
         <input
           ref={inputRef}
           data-cy="NewTodoField"
@@ -71,7 +74,7 @@ export const TodoInput: React.FC<Props> = ({
           className="todoapp__new-todo"
           placeholder="What needs to be done?"
           onChange={handleInputValue}
-          onKeyDown={handleAddTodo}
+          disabled={tempTodo}
         />
       </form>
     </header>

@@ -57,9 +57,8 @@ export const App: React.FC = () => {
         setLoadingIds([]);
       })
       .catch(() => {
-        setTodos(filteredTodos);
         setErrorMessage('Unable to delete a todo');
-
+        setTodos(todos);
         setLoadingIds([]);
       });
   }
@@ -78,6 +77,7 @@ export const App: React.FC = () => {
           todos={todos}
           setTodos={setTodos}
           setTempTodo={setTempTodo}
+          tempTodo={tempTodo}
         />
 
         <TodoList

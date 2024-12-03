@@ -26,10 +26,12 @@ export const Footer: React.FC<Props> = ({
   function handleClearComplete() {
     const completedTodo = todos.filter(todo => todo.completed);
 
-    completedTodo.map(todo => {
-      setLoadingIds(current => [...current, todo.id]);
-      handleDeleteTodo(todo.id);
-    });
+    Promise.allSettled(completedTodo).then(() =>
+      completedTodo.map(todo => {
+        setLoadingIds(current => [...current, todo.id]);
+        handleDeleteTodo(todo.id);
+      }),
+    );
   }
 
   return (
