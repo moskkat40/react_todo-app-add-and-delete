@@ -28,7 +28,7 @@ export const TodoInput: React.FC<Props> = ({
     }
   }, [todos, tempTodo]);
 
-  function handleInputValue(event: React.ChangeEvent<HTMLInputElement>) {
+  const handleInputValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   }
 

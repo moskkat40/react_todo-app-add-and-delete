@@ -12,10 +12,16 @@ import { ErrorNotification } from './components/ErrorNotification/ErrorNotificat
 import { Footer } from './components/Footer/Footer';
 import { Filter } from './types/Filter';
 
+export enum FilterParam {
+  All = 'All',
+  Active = 'Active',
+  Completed = 'Completed',
+}
+
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const [filter, setFilter] = useState<Filter>('All');
+  const [filter, setFilter] = useState<Filter>(FilterParam.All);
   const [tempTodo, setTempTodo] = useState(null);
   const [loadingIds, setLoadingIds] = useState<number[]>([]);
 
@@ -35,18 +41,18 @@ export const App: React.FC = () => {
   }, [errorMessage]);
 
   const filteredTodos = useMemo(() => {
-    if (filter === 'Active') {
+    if (filter === FilterParam.Active) {
       return todos.filter(todo => !todo.completed);
     }
 
-    if (filter === 'Completed') {
+    if (filter === FilterParam.Completed) {
       return todos.filter(todo => todo.completed);
     }
 
     return todos;
   }, [filter, todos]);
 
-  function handleDeleteTodo(todoId: number) {
+  const handleDeleteTodo = (todoId: number) => {
     setLoadingIds(current => [...current, todoId]);
 
     return servisesTodos
@@ -61,7 +67,7 @@ export const App: React.FC = () => {
         setTodos(todos);
         setLoadingIds([]);
       });
-  }
+  };
 
   if (!USER_ID) {
     return <UserWarning />;

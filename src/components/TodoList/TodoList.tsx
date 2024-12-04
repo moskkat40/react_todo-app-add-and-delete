@@ -18,31 +18,31 @@ export const TodoList: React.FC<Props> = ({
 }) => {
   return (
     <section className="todoapp__main" data-cy="TodoList">
-      {filteredTodos.map(todo => (
+      {filteredTodos.map(({ title, id, completed }) => (
         <>
           <div
-            key={todo.id}
+            key={id}
             data-cy="Todo"
-            className={classNames('todo', { completed: todo.completed })}
+            className={classNames('todo', { completed: completed })}
           >
-            <label htmlFor={`${todo.id}`} className="todo__status-label">
+            <label htmlFor={`${id}`} className="todo__status-label">
               <input
-                id={`${todo.id}`}
+                id={`${id}`}
                 data-cy="TodoStatus"
                 type="checkbox"
                 className="todo__status"
-                checked={todo.completed}
+                checked={completed}
               />
             </label>
 
             <span data-cy="TodoTitle" className="todo__title">
-              {todo.title}
+              {title}
             </span>
             <button
               type="button"
               className="todo__remove"
               data-cy="TodoDelete"
-              onClick={() => handleDeleteTodo(todo.id)}
+              onClick={() => handleDeleteTodo(id)}
             >
               ×
             </button>
@@ -50,7 +50,7 @@ export const TodoList: React.FC<Props> = ({
             <div
               data-cy="TodoLoader"
               className={classNames('modal overlay', {
-                'is-active': loadingIds.includes(todo.id),
+                'is-active': loadingIds.includes(id),
               })}
             >
               <div className="modal-background has-background-white-ter" />

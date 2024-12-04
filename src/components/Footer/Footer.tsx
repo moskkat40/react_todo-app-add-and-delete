@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import { Todo } from '../../types/Todo';
 import { Filter } from '../../types/Filter';
+import { FilterParam } from '../../App';
 
 type Props = {
   filter: string;
@@ -17,13 +18,13 @@ export const Footer: React.FC<Props> = ({
   handleDeleteTodo,
   setLoadingIds,
 }) => {
-  function handleFilter(event: React.MouseEvent<HTMLElement>) {
+  const handleFilter = (event: React.MouseEvent<HTMLElement>) => {
     const filterValue = event.currentTarget.textContent as Filter;
 
     setFilter(filterValue);
-  }
+  };
 
-  function handleClearComplete() {
+  const handleClearComplete = () => {
     const completedTodo = todos.filter(todo => todo.completed);
 
     Promise.allSettled(completedTodo).then(() =>
@@ -32,49 +33,31 @@ export const Footer: React.FC<Props> = ({
         handleDeleteTodo(todo.id);
       }),
     );
-  }
+  };
+
+  const amountActiveTodos = todos.filter(todo => !todo.completed).length;
 
   return (
     <footer className="todoapp__footer" data-cy="Footer">
       <span className="todo-count" data-cy="TodosCounter">
-        {todos.filter(todo => !todo.completed).length} items left
+        {amountActiveTodos} items left
       </span>
 
-      {/* Active link should have the 'selected' class */}
       <nav className="filter" data-cy="Filter">
-        <a
-          href="#/"
-          className={classNames('filter__link', { selected: filter === 'All' })}
-          data-cy="FilterLinkAll"
-          onClick={handleFilter}
-        >
-          All
-        </a>
-
-        <a
-          href="#/active"
-          className={classNames('filter__link', {
-            selected: filter === 'Active',
-          })}
-          data-cy="FilterLinkActive"
-          onClick={handleFilter}
-        >
-          Active
-        </a>
-
-        <a
-          href="#/completed"
-          className={classNames('filter__link', {
-            selected: filter === 'Completed',
-          })}
-          data-cy="FilterLinkCompleted"
-          onClick={handleFilter}
-        >
-          Completed
-        </a>
+        {Object.values(FilterParam).map(param => (
+          <a
+            key={param}
+            href="#/"
+            className={classNames('filter__link', {
+              selected: filter === param,
+            })}
+            data-cy={`FilterLink${param}`}
+            onClick={handleFilter}
+          >
+            {param}
+          </a>
+        ))}
       </nav>
-
-      {/* this button should be disabled if there are no completed todos */}
       <button
         type="button"
         className="todoapp__clear-completed"

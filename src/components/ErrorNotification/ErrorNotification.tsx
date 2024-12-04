@@ -10,7 +10,7 @@ export const ErrorNotification: React.FC<Props> = ({
   errorMessage,
   setErrorMessage,
 }) => {
-  function handleCloseNotification() {
+  const handleCloseNotification = () => {
     setErrorMessage('');
   }
 
