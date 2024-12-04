@@ -8,7 +8,6 @@ type Props = {
   setFilter: (a: Filter) => void;
   todos: Todo[];
   handleDeleteTodo: (a: number) => void;
-  setLoadingIds: (a: number[]) => void;
 };
 
 export const Footer: React.FC<Props> = ({
@@ -16,7 +15,6 @@ export const Footer: React.FC<Props> = ({
   setFilter,
   todos,
   handleDeleteTodo,
-  setLoadingIds,
 }) => {
   const handleFilter = (event: React.MouseEvent<HTMLElement>) => {
     const filterValue = event.currentTarget.textContent as Filter;
@@ -25,14 +23,12 @@ export const Footer: React.FC<Props> = ({
   };
 
   const handleClearComplete = () => {
-    const completedTodo = todos.filter(todo => todo.completed);
-
-    Promise.allSettled(completedTodo).then(() =>
-      completedTodo.map(todo => {
-        setLoadingIds(current => [...current, todo.id]);
-        handleDeleteTodo(todo.id);
-      }),
+    const completedTodos = todos.filter(todo => todo.completed);
+    const deletePromises = completedTodos.map(todo =>
+      handleDeleteTodo(todo.id),
     );
+
+    Promise.allSettled(deletePromises);
   };
 
   const amountActiveTodos = todos.filter(todo => !todo.completed).length;

@@ -12,7 +12,7 @@ export const ErrorNotification: React.FC<Props> = ({
 }) => {
   const handleCloseNotification = () => {
     setErrorMessage('');
-  }
+  };
 
   return (
     <div

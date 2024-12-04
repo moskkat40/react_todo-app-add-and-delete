@@ -59,13 +59,13 @@ export const App: React.FC = () => {
       .deleteTodo(todoId)
       .then(() => {
         setTodos(currentTodo => currentTodo.filter(todo => todo.id !== todoId));
-
-        setLoadingIds([]);
       })
-      .catch(() => {
+      .catch(error => {
         setErrorMessage('Unable to delete a todo');
-        setTodos(todos);
-        setLoadingIds([]);
+        throw error;
+      })
+      .finally(() => {
+        setLoadingIds(current => current.filter(id => id !== todoId));
       });
   };
 
@@ -98,7 +98,6 @@ export const App: React.FC = () => {
             setFilter={setFilter}
             todos={todos}
             handleDeleteTodo={handleDeleteTodo}
-            setLoadingIds={setLoadingIds}
           />
         )}
       </div>

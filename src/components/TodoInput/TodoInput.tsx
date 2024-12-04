@@ -30,7 +30,7 @@ export const TodoInput: React.FC<Props> = ({
 
   const handleInputValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
-  }
+  };
 
   const handleAddTodo = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
